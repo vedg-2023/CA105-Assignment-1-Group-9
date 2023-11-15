@@ -11,7 +11,7 @@ All the work was equally distributed.
 
 ER diagram
 <img
-  src="./ERD.jpg"
+  src="./ERD1.jpg"
   alt="Alt text"
   title="Optional title"
   style="display: inline-block; margin: 0 auto;width: 100%;height:100%;padding:10px">
@@ -1005,3 +1005,5 @@ INSERT INTO booking (ticket_id, p_id, agent_id, schedule_id, seat_id, price, dis
 VALUES ('T0010', 'P0010', 'A0011', 'SCH0099', 'S0010', 700, 10, 'confirmed');
 
 
+![ERD1](https://github.com/vedg-2023/CA105-Assignment-1-Group-9/assets/150942412/cc32784d-bda6-4432-8e9d-94275271cf20)
+![IMG20231115225343](https://github.com/vedg-2023/CA105-Assignment-1-Group-9/assets/150942412/13fdce31-2dee-4684-8ae4-0e910d989baa)
