@@ -1,0 +1,255 @@
+VED ANIL GURNULE
+23112041
+
+SET B
+1.
+
+-- Query to show schedule of all trips including main driver information for 10th October this year
+SELECT
+    sch.schedule_id,
+    sch.route_id,
+    sch.start_date,
+    sch.end_date,
+    sch.depart_time,
+    sch.arrival_time,
+    drv.staff_name AS driver_name,
+    drv.phone AS driver_phone,
+    drv.city AS driver_city,
+    drv.pincode AS driver_pincode
+FROM
+    schedule sch
+    JOIN train tr ON sch.train_id = tr.train_id
+    JOIN coach co ON tr.train_id = co.train_id
+    JOIN staff drv ON co.driver_id = drv.staff_id
+WHERE
+    sch.start_date = '2023-10-10';
+
+Output
++-------------+----------+------------+------------+-------------+--------------+-----------------+--------------+--------------------+----------------+
+| schedule_id | route_id | start_date | end_date   | depart_time | arrival_time | driver_name     | driver_phone | driver_city        | driver_pincode |
++-------------+----------+------------+------------+-------------+--------------+-----------------+--------------+--------------------+----------------+
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Amit Sharma     | 9876543210   | Mumbai             |         400001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Amit Sharma     | 9876543210   | Mumbai             |         400001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Rahul Singh     | 7654321098   | Chennai            |         600001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Rahul Singh     | 7654321098   | Chennai            |         600001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Ravi Verma      | 9898989898   | Bangalore          |         560001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Ravi Verma      | 9898989898   | Bangalore          |         560001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Nitin Joshi     | 8765432101   | Ahmedabad          |         380001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Nitin Joshi     | 8765432101   | Ahmedabad          |         380001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Vijay Kumar     | 9988776656   | Jaipur             |         302001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Vijay Kumar     | 9988776656   | Jaipur             |         302001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Rajesh Khanna   | 8765432102   | Kochi              |         682001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Rajesh Khanna   | 8765432102   | Kochi              |         682001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Sanjay Dubey    | 8765432103   | Patna              |         800001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Sanjay Dubey    | 8765432103   | Patna              |         800001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Arjun Menon     | 9090909092   | Coimbatore         |         641001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Arjun Menon     | 9090909092   | Coimbatore         |         641001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Rahul Gupta     | 9988776658   | Indore             |         452001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Rahul Gupta     | 9988776658   | Indore             |         452001 |
+| SCH0007     | R0011    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Vishal Nair     | 8765432105   | Thiruvananthapuram |         695001 |
+| SCH0001     | R0001    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | Vishal Nair     | 8765432105   | Thiruvananthapuram |         695001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Priya Patel     | 9988776655   | Delhi              |         110001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Priya Patel     | 9988776655   | Delhi              |         110001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Pooja Gupta     | 8765432109   | Kolkata            |         700001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Pooja Gupta     | 8765432109   | Kolkata            |         700001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Anita Das       | 9090909090   | Hyderabad          |         500001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Anita Das       | 9090909090   | Hyderabad          |         500001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Sneha Deshmukh  | 9876543212   | Pune               |         411001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Sneha Deshmukh  | 9876543212   | Pune               |         411001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Swati Singh     | 7654321099   | Lucknow            |         226001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Swati Singh     | 7654321099   | Lucknow            |         226001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Meena Choudhary | 9090909091   | Bhopal             |         462001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Meena Choudhary | 9090909091   | Bhopal             |         462001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Rekha Sharma    | 9898989899   | Kanpur             |         208001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Rekha Sharma    | 9898989899   | Kanpur             |         208001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Anjali Desai    | 9876543214   | Nagpur             |         440001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Anjali Desai    | 9876543214   | Nagpur             |         440001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Kiran Patel     | 7654321101   | Vadodara           |         390001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Kiran Patel     | 7654321101   | Vadodara           |         390001 |
+| SCH0019     | R0012    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Preeti Barua    | 9090909093   | Guwahati           |         781001 |
+| SCH0013     | R0002    | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | Preeti Barua    | 9090909093   | Guwahati           |         781001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Rahul Singh     | 7654321098   | Chennai            |         600001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Rahul Singh     | 7654321098   | Chennai            |         600001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Ravi Verma      | 9898989898   | Bangalore          |         560001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Ravi Verma      | 9898989898   | Bangalore          |         560001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Nitin Joshi     | 8765432101   | Ahmedabad          |         380001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Nitin Joshi     | 8765432101   | Ahmedabad          |         380001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Vijay Kumar     | 9988776656   | Jaipur             |         302001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Vijay Kumar     | 9988776656   | Jaipur             |         302001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Rajesh Khanna   | 8765432102   | Kochi              |         682001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Rajesh Khanna   | 8765432102   | Kochi              |         682001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Sanjay Dubey    | 8765432103   | Patna              |         800001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Sanjay Dubey    | 8765432103   | Patna              |         800001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Arjun Menon     | 9090909092   | Coimbatore         |         641001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Arjun Menon     | 9090909092   | Coimbatore         |         641001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Rahul Gupta     | 9988776658   | Indore             |         452001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Rahul Gupta     | 9988776658   | Indore             |         452001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Vishal Nair     | 8765432105   | Thiruvananthapuram |         695001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Vishal Nair     | 8765432105   | Thiruvananthapuram |         695001 |
+| SCH0031     | R0013    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Priya Patel     | 9988776655   | Delhi              |         110001 |
+| SCH0025     | R0003    | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | Priya Patel     | 9988776655   | Delhi              |         110001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Pooja Gupta     | 8765432109   | Kolkata            |         700001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Pooja Gupta     | 8765432109   | Kolkata            |         700001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Anita Das       | 9090909090   | Hyderabad          |         500001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Anita Das       | 9090909090   | Hyderabad          |         500001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Sneha Deshmukh  | 9876543212   | Pune               |         411001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Sneha Deshmukh  | 9876543212   | Pune               |         411001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Swati Singh     | 7654321099   | Lucknow            |         226001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Swati Singh     | 7654321099   | Lucknow            |         226001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Meena Choudhary | 9090909091   | Bhopal             |         462001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Meena Choudhary | 9090909091   | Bhopal             |         462001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Rekha Sharma    | 9898989899   | Kanpur             |         208001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Rekha Sharma    | 9898989899   | Kanpur             |         208001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Anjali Desai    | 9876543214   | Nagpur             |         440001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Anjali Desai    | 9876543214   | Nagpur             |         440001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Kiran Patel     | 7654321101   | Vadodara           |         390001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Kiran Patel     | 7654321101   | Vadodara           |         390001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Preeti Barua    | 9090909093   | Guwahati           |         781001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Preeti Barua    | 9090909093   | Guwahati           |         781001 |
+| SCH0043     | R0014    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Priya Patel     | 9988776655   | Delhi              |         110001 |
+| SCH0037     | R0004    | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | Priya Patel     | 9988776655   | Delhi              |         110001 |
++-------------+----------+------------+------------+-------------+--------------+-----------------+--------------+--------------------+----------------+
+
+2.
+
+-- Query to list coaches with mileage between 4000 and 4999 km for September this year
+SELECT
+    c.coach_id,
+    c.mileage,
+    c.last_mntn_dt AS last_service_date,
+    COUNT(s.schedule_id) AS total_scheduled_trips
+FROM
+    coach c
+    JOIN train t ON c.train_id = t.train_id
+    JOIN schedule s ON t.train_id = s.train_id
+WHERE
+    c.mileage BETWEEN 4000 AND 4999
+    AND MONTH(s.start_date) = 9
+    AND YEAR(s.start_date) = YEAR(CURRENT_DATE)
+GROUP BY
+    c.coach_id, c.mileage, c.last_mntn_dt
+ORDER BY
+    c.coach_id;
+
+Output:
++----------+---------+-------------------+-----------------------+
+| coach_id | mileage | last_service_date | total_scheduled_trips |
++----------+---------+-------------------+-----------------------+
+| C0001    |    4500 | 2023-03-12        |                    10 |
+| C0004    |    4800 | 2023-04-20        |                    10 |
+| C0008    |    4000 | 2023-08-22        |                    10 |
+| C0009    |    4200 | 2023-09-28        |                    10 |
++----------+---------+-------------------+-----------------------+
+
+
+3.
+
+-- Query to list agents and route information in descending order of bookings in October
+SELECT
+    a.agent_id,
+    a.agent_name,
+    r.route_id,
+    r.route,
+    COUNT(b.ticket_id) AS total_bookings
+FROM
+    agent a
+    JOIN booking b ON a.agent_id = b.agent_id
+    JOIN schedule s ON b.schedule_id = s.schedule_id
+    JOIN route r ON s.route_id = r.route_id
+WHERE
+    MONTH(s.start_date) = 10
+    AND YEAR(s.start_date) = YEAR(CURRENT_DATE)
+GROUP BY
+    a.agent_id, a.agent_name, r.route_id, r.route
+ORDER BY
+    total_bookings DESC;
+
+Output:
++----------+--------------+----------+-----------------------------------+----------------+
+| agent_id | agent_name   | route_id | route                             | total_bookings |
++----------+--------------+----------+-----------------------------------+----------------+
+| A0016    | Ishita Gupta | R0004    | Mumbai Central to Sainagar Shirdi |              1 |
+| A0017    | Akash Sharma | R0016    | Delhi to Bhopal                   |              1 |
+| A0020    | Sneha Yadav  | R0005    | Mumbai Central to Solapur         |              1 |
+| A0016    | Ishita Gupta | R0018    | Bengaluru to Dharwad              |              1 |
+| A0017    | Akash Sharma | R0015    | Solapur to Mumbai Central         |              1 |
+| A0011    | Aditya Gupta | R0007    | Lonavala to Ajmer                 |              1 |
+| A0012    | Pooja Joshi  | R0011    | Gandhinagar to Mumbai Central     |              1 |
+| A0020    | Sneha Yadav  | R0007    | Lonavala to Ajmer                 |              1 |
+| A0011    | Aditya Gupta | R0006    | Bhopal to Delhi                   |              1 |
++----------+--------------+----------+-----------------------------------+----------------+
+
+
+
+4.
+
+-- Query to display details of routes where majority of bookings are not made by agents
+SELECT
+    r.route_id,
+    r.route,
+    COUNT(b.ticket_id) AS total_bookings,
+    SUM(CASE WHEN b.agent_id IS NULL THEN 1 ELSE 0 END) AS bookings_not_by_agents,
+    IFNULL((SUM(CASE WHEN b.agent_id IS NULL THEN 1 ELSE 0 END) / COUNT(b.ticket_id)) * 100, 0) AS percentage_not_by_agents
+FROM
+    route r
+    LEFT JOIN schedule s ON r.route_id = s.route_id
+    LEFT JOIN booking b ON s.schedule_id = b.schedule_id
+GROUP BY
+    r.route_id, r.route
+HAVING
+    percentage_not_by_agents > 50
+ORDER BY
+    percentage_not_by_agents DESC;
+
+
+Output:
++----------+-----------------------------------+----------------+------------------------+--------------------------+
+| route_id | route                             | total_bookings | bookings_not_by_agents | percentage_not_by_agents |
++----------+-----------------------------------+----------------+------------------------+--------------------------+
+| R0014    | Sainagar Shirdi to Mumbai Central |              1 |                      6 |                 600.0000 |
+| R0010    | Mumbai Central to Goa             |              1 |                      4 |                 400.0000 |
+| R0003    | Secunderabad to Visakhapatnam     |              3 |                      6 |                 200.0000 |
+| R0018    | Bengaluru to Dharwad              |              2 |                      4 |                 200.0000 |
+| R0004    | Mumbai Central to Sainagar Shirdi |              3 |                      5 |                 166.6667 |
+| R0002    | New Delhi to Himachal             |              5 |                      8 |                 160.0000 |
+| R0012    | Himachal to New Delhi             |              5 |                      8 |                 160.0000 |
+| R0017    | Ajmer to Lonavala                 |              5 |                      8 |                 160.0000 |
+| R0005    | Mumbai Central to Solapur         |              4 |                      6 |                 150.0000 |
+| R0020    | Goa to Mumbai Central             |              2 |                      3 |                 150.0000 |
+| R0011    | Gandhinagar to Mumbai Central     |              5 |                      7 |                 140.0000 |
+| R0015    | Solapur to Mumbai Central         |              4 |                      5 |                 125.0000 |
+| R0016    | Delhi to Bhopal                   |              4 |                      4 |                 100.0000 |
+| R0006    | Bhopal to Delhi                   |              4 |                      3 |                  75.0000 |
+| R0007    | Lonavala to Ajmer                 |              5 |                      3 |                  60.0000 |
++----------+-----------------------------------+----------------+------------------------+--------------------------+
+
+
+5.
+
+
+-- Query to display details of agents with maximum commission in September
+SELECT
+    a.agent_id,
+    a.agent_name,
+    SUM(b.price * b.disc_percent / 100) AS total_commission
+FROM
+    agent a
+    JOIN booking b ON a.agent_id = b.agent_id
+    JOIN schedule s ON b.schedule_id = s.schedule_id
+WHERE
+    MONTH(s.start_date) = 9
+    AND YEAR(s.start_date) = YEAR(CURRENT_DATE)
+GROUP BY
+    a.agent_id, a.agent_name
+ORDER BY
+    total_commission DESC;
+
+
+Output:
++----------+--------------+------------------+
+| agent_id | agent_name   | total_commission |
++----------+--------------+------------------+
+| A0011    | Aditya Gupta |         969.2000 |
+| A0016    | Ishita Gupta |          77.6000 |
+| A0001    | Aarav Patel  |           0.0000 |
++----------+--------------+------------------+

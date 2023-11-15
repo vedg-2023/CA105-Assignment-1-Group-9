@@ -1,0 +1,257 @@
+ABHISHEK PATEKAR
+23112025
+
+SET C
+
+1.
+
+-- Query to list all trains not scheduled on 10th October this year
+SELECT
+    t.train_id,
+    t.train_name
+FROM
+    train t
+WHERE
+    NOT EXISTS (
+        SELECT 1
+        FROM
+            schedule s
+        WHERE
+            s.train_id = t.train_id
+            AND DATE(s.start_date) = '2023-10-10'
+    );
+
+
+Output:
++----------+----------------------+
+| train_id | train_name           |
++----------+----------------------+
+| T009     | Chennai Express      |
+| T010     | Kolkata Express      |
+| T011     | Ganga Jamuna Express |
+| T012     | Malabar Express      |
+| T013     | Jodhpur Express      |
+| T014     | Bengaluru Shatabdi   |
+| T015     | Punjab Mail          |
+| T016     | Goa Express          |
+| T017     | Ahmedabad Express    |
+| T018     | Kochi Rajya Rani     |
+| T019     | Ooty Mountain Rail   |
+| T020     | Delhi Metro          |
++----------+----------------------+
+
+
+
+2.
+
+-- Query to list all fleets with total bookings for October
+SELECT
+    c.coach_id,
+    c.mileage,
+    c.last_mntn_dt,
+    t.train_id,
+    t.train_name,
+    COUNT(b.ticket_id) AS total_bookings
+FROM
+    coach c
+    JOIN train t ON c.train_id = t.train_id
+    JOIN schedule sc ON c.train_id = sc.train_id
+    LEFT JOIN booking b ON sc.schedule_id = b.schedule_id
+WHERE
+    MONTH(sc.start_date) = 10
+    AND YEAR(sc.start_date) = YEAR(CURRENT_DATE)
+GROUP BY
+    c.coach_id, c.mileage, c.last_mntn_dt, t.train_id, t.train_name
+ORDER BY
+    total_bookings ASC;
+
+
+Output
++----------+---------+--------------+----------+------------------+----------------+
+| coach_id | mileage | last_mntn_dt | train_id | train_name       | total_bookings |
++----------+---------+--------------+----------+------------------+----------------+
+| C0030    |    4400 | 2023-11-05   | T003     | Duronto Express  |              1 |
+| C0029    |    3800 | 2023-10-22   | T003     | Duronto Express  |              1 |
+| C0021    |    4100 | 2023-02-01   | T003     | Duronto Express  |              1 |
+| C0022    |    5300 | 2023-03-18   | T003     | Duronto Express  |              1 |
+| C0023    |    3700 | 2023-04-05   | T003     | Duronto Express  |              1 |
+| C0024    |    5000 | 2023-05-12   | T003     | Duronto Express  |              1 |
+| C0025    |    6000 | 2023-06-20   | T003     | Duronto Express  |              1 |
+| C0026    |    3300 | 2023-07-25   | T003     | Duronto Express  |              1 |
+| C0027    |    4600 | 2023-08-10   | T003     | Duronto Express  |              1 |
+| C0028    |    5700 | 2023-09-15   | T003     | Duronto Express  |              1 |
+| C0031    |    4900 | 2023-01-20   | T004     | Garib Rath       |              2 |
+| C0040    |    4700 | 2023-10-15   | T004     | Garib Rath       |              2 |
+| C0039    |    5300 | 2023-09-28   | T004     | Garib Rath       |              2 |
+| C0038    |    3600 | 2023-08-22   | T004     | Garib Rath       |              2 |
+| C0037    |    5500 | 2023-07-15   | T004     | Garib Rath       |              2 |
+| C0036    |    4200 | 2023-06-05   | T004     | Garib Rath       |              2 |
+| C0035    |    4800 | 2023-05-10   | T004     | Garib Rath       |              2 |
+| C0034    |    4000 | 2023-04-20   | T004     | Garib Rath       |              2 |
+| C0033    |    5200 | 2023-03-15   | T004     | Garib Rath       |              2 |
+| C0032    |    3500 | 2023-02-28   | T004     | Garib Rath       |              2 |
+| C0020    |    3900 | 2023-10-10   | T002     | Shatabdi Express |              5 |
+| C0011    |    5100 | 2023-01-05   | T002     | Shatabdi Express |              5 |
+| C0012    |    3300 | 2023-02-10   | T002     | Shatabdi Express |              5 |
+| C0013    |    4900 | 2023-03-25   | T002     | Shatabdi Express |              5 |
+| C0014    |    3800 | 2023-04-30   | T002     | Shatabdi Express |              5 |
+| C0015    |    4200 | 2023-05-20   | T002     | Shatabdi Express |              5 |
+| C0016    |    5500 | 2023-06-15   | T002     | Shatabdi Express |              5 |
+| C0017    |    3400 | 2023-07-28   | T002     | Shatabdi Express |              5 |
+| C0018    |    4700 | 2023-08-15   | T002     | Shatabdi Express |              5 |
+| C0019    |    5900 | 2023-09-02   | T002     | Shatabdi Express |              5 |
+| C0009    |    4200 | 2023-09-28   | T001     | Rajdhani Express |              6 |
+| C0008    |    4000 | 2023-08-22   | T001     | Rajdhani Express |              6 |
+| C0007    |    5500 | 2023-07-15   | T001     | Rajdhani Express |              6 |
+| C0006    |    3200 | 2023-06-05   | T001     | Rajdhani Express |              6 |
+| C0005    |    5800 | 2023-05-10   | T001     | Rajdhani Express |              6 |
+| C0004    |    4800 | 2023-04-20   | T001     | Rajdhani Express |              6 |
+| C0003    |    3500 | 2023-01-15   | T001     | Rajdhani Express |              6 |
+| C0002    |    5200 | 2023-02-28   | T001     | Rajdhani Express |              6 |
+| C0001    |    4500 | 2023-03-12   | T001     | Rajdhani Express |              6 |
+| C0010    |    3600 | 2023-10-15   | T001     | Rajdhani Express |              6 |
++----------+---------+--------------+----------+------------------+----------------+
+
+
+
+3.
+
+-- Query to list details of the most popular route
+SELECT
+    r.route_id,
+    r.route,
+    COUNT(b.ticket_id) AS total_bookings
+FROM
+    route r
+    LEFT JOIN schedule s ON r.route_id = s.route_id
+    LEFT JOIN booking b ON s.schedule_id = b.schedule_id
+GROUP BY
+    r.route_id, r.route
+ORDER BY
+    total_bookings DESC;
+
+Output:
++----------+-----------------------------------+----------------+
+| route_id | route                             | total_bookings |
++----------+-----------------------------------+----------------+
+| R0001    | Mumbai Central to Gandhinagar     |             13 |
+| R0002    | New Delhi to Himachal             |              5 |
+| R0007    | Lonavala to Ajmer                 |              5 |
+| R0011    | Gandhinagar to Mumbai Central     |              5 |
+| R0012    | Himachal to New Delhi             |              5 |
+| R0017    | Ajmer to Lonavala                 |              5 |
+| R0005    | Mumbai Central to Solapur         |              4 |
+| R0006    | Bhopal to Delhi                   |              4 |
+| R0015    | Solapur to Mumbai Central         |              4 |
+| R0016    | Delhi to Bhopal                   |              4 |
+| R0003    | Secunderabad to Visakhapatnam     |              3 |
+| R0004    | Mumbai Central to Sainagar Shirdi |              3 |
+| R0018    | Bengaluru to Dharwad              |              2 |
+| R0020    | Goa to Mumbai Central             |              2 |
+| R0010    | Mumbai Central to Goa             |              1 |
+| R0014    | Sainagar Shirdi to Mumbai Central |              1 |
+| R0008    | Dharwad to Bengaluru              |              0 |
+| R0009    | Bhopal to Indore                  |              0 |
+| R0013    | Visakhapatnam to Secunderabad     |              0 |
+| R0019    | Indore to Bhopal                  |              0 |
++----------+-----------------------------------+----------------+
+
+4.
+
+
+-- Query to display details of frequent travelers
+SELECT
+    p.p_id,
+    p.p_name,
+    COUNT(b.ticket_id) AS total_trips
+FROM
+    passenger p
+    JOIN booking b ON p.p_id = b.p_id
+GROUP BY
+    p.p_id, p.p_name
+HAVING
+    total_trips >= 3;
+
+Output:
++-------+--------------+-------------+
+| p_id  | p_name       | total_trips |
++-------+--------------+-------------+
+| P0001 | Aarav Gupta  |           4 |
+| P0002 | Diya Patel   |           7 |
+| P0003 | Rohan Sharma |           4 |
+| P0004 | Priya Singh  |           3 |
+| P0005 | Amit Verma   |           4 |
+| P0006 | Ananya Das   |           4 |
+| P0014 | Rekha Sharma |           3 |
+| P0017 | Rahul Gupta  |           3 |
+| P0021 | Aditya Kumar |           3 |
+| P0023 | Aryan Singh  |           3 |
+| P0024 | Aisha Sharma |           3 |
+| P0029 | Vikram Kumar |           3 |
+| P0030 | Neeta Singh  |           3 |
++-------+--------------+-------------+
+
+
+
+5.
+
+-- Query to display details of trains arriving late more than once in this year
+SELECT
+    t.train_id,
+    t.train_name,
+    c1.driver_id,
+    s1.staff_name AS driver_name,
+    c2.codriver_id,
+    s2.staff_name AS codriver_name,
+    s.schedule_id,
+    s.start_date,
+    s.end_date,
+    s.depart_time,
+    s.arrival_time,
+    i.act_depart_time AS actual_depart_time,
+    i.act_arrival_time AS actual_arrival_time
+FROM
+    train t
+    JOIN coach c1 ON t.train_id = c1.train_id
+    JOIN coach c2 ON t.train_id = c2.train_id
+    JOIN schedule s ON t.train_id = s.train_id
+    JOIN include i ON s.schedule_id = i.schedule_id
+    JOIN staff s1 ON c1.driver_id = s1.staff_id
+    JOIN staff s2 ON c2.codriver_id = s2.staff_id
+WHERE
+    YEAR(s.end_date) = YEAR(CURRENT_DATE)
+    AND TIME(i.act_arrival_time) > TIME(s.arrival_time)
+GROUP BY
+    t.train_id, s.schedule_id
+HAVING
+    COUNT(*) > 1;
+
+
++----------+------------------+-----------+--------------+-------------+---------------+-------------+------------+------------+-------------+--------------+--------------------+---------------------+
+| train_id | train_name       | driver_id | driver_name  | codriver_id | codriver_name | schedule_id | start_date | end_date   | depart_time | arrival_time | actual_depart_time | actual_arrival_time |
++----------+------------------+-----------+--------------+-------------+---------------+-------------+------------+------------+-------------+--------------+--------------------+---------------------+
+| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0001     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | 08:00:00           | 14:10:00            |
+| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0003     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:25:00     | 13:45:00           | 19:55:00            |
+| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0005     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:10:00     | 19:30:00           | 01:40:00            |
+| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0007     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | 08:00:00           | 14:10:00            |
+| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0009     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:25:00     | 13:45:00           | 19:55:00            |
+| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0011     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:10:00     | 19:30:00           | 01:40:00            |
+| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0013     | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | 08:00:00           | 14:40:00            |
+| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0015     | 2023-10-20 | 2023-10-20 | 13:45:00    | 20:55:00     | 13:45:00           | 21:25:00            |
+| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0017     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:40:00     | 19:30:00           | 02:10:00            |
+| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0019     | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | 08:00:00           | 14:40:00            |
+| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0021     | 2023-10-20 | 2023-10-20 | 13:45:00    | 20:55:00     | 13:45:00           | 21:25:00            |
+| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0023     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:40:00     | 19:30:00           | 02:10:00            |
+| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0025     | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | 08:00:00           | 17:00:00            |
+| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0027     | 2023-10-20 | 2023-10-20 | 13:45:00    | 22:15:00     | 13:45:00           | 22:45:00            |
+| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0029     | 2023-10-30 | 2023-10-30 | 19:30:00    | 04:00:00     | 19:30:00           | 04:30:00            |
+| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0031     | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | 08:00:00           | 17:00:00            |
+| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0033     | 2023-10-20 | 2023-10-20 | 13:45:00    | 22:15:00     | 13:45:00           | 22:45:00            |
+| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0035     | 2023-10-30 | 2023-10-30 | 19:30:00    | 04:00:00     | 19:30:00           | 04:30:00            |
+| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0037     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | 08:00:00           | 13:50:00            |
+| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0039     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:05:00     | 13:45:00           | 19:35:00            |
+| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0041     | 2023-10-30 | 2023-10-30 | 19:30:00    | 00:50:00     | 19:30:00           | 01:20:00            |
+| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0043     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | 08:00:00           | 13:50:00            |
+| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0045     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:05:00     | 13:45:00           | 19:35:00            |
+| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0047     | 2023-10-30 | 2023-10-30 | 19:30:00    | 00:50:00     | 19:30:00           | 01:20:00            |
++----------+------------------+-----------+--------------+-------------+---------------+-------------+------------+------------+-------------+--------------+--------------------+---------------------+
