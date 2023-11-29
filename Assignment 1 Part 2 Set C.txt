@@ -3,9 +3,8 @@ ABHISHEK PATEKAR
 
 SET C
 
-1.
+1. List all trains not scheduled on 10th October this year.
 
--- Query to list all trains not scheduled on 10th October this year
 select t.train_id, t.train_name from train t where not exists (select 1 from schedule s where s.train_id = t.train_id and date(s.start_date) = '2023-10-10');
 
 Output:
@@ -28,9 +27,8 @@ Output:
 
 
 
-2.
+2. List all fleets from Dharwad to Bengaluru, in ascending order of their monthly seats sold for the month of October this year.
 
--- Query to list all fleets with total bookings for October
 select c.coach_id, c.mileage, .last_mntn_dt, t.train_id, t.train_name, count(b.ticket_id) as total_bookings from coach c join train t on c.train_id = t.train_id join schedule sc on c.train_id = sc.train_id left join booking b on sc.schedule_id = b.schedule_id where month(sc.start_date) = 10 and year(sc.start_date) = year(current_date) group by c.coach_id, c.mileage, c.last_mntn_dt, t.train_id, t.train_name order by total_bookings asc;
 
 
@@ -82,9 +80,8 @@ Output
 
 
 
-3.
+3. List the details of most popular route of InterCity Express Trains.
 
--- Query to list details of the most popular route
 select r.route_id, r.route, count(b.ticket_id) as total_bookings from route r left join schedule s on r.route_id = s.route_id left join booking b on s.schedule_id = b.schedule_id group by r.route_id, r.route order by total_bookings desc;
 
 Output:
@@ -113,10 +110,10 @@ Output:
 | R0019    | Indore to Bhopal                  |              0 |
 +----------+-----------------------------------+----------------+
 
-4.
 
 
--- Query to display details of frequent travelers
+4. Display the details of the passengers who are frequent travellers with InterCity Express Trains. [Frequent traveller can be defined as the one who has travelled at least three times, irrespective of the route]
+
 select p.p_id, p.p_name, count(b.ticket_id) as total_trips from passenger p join booking b on p.p_id = b.p_id group by p.p_id, p.p_name having total_trips >= 3;
 
 Output:
@@ -140,4 +137,4 @@ Output:
 
 
 
-5.
+5. Display the details of trains which arrived late at their destination, more than once in this year; Include the driver and co-driver information in the output. 
