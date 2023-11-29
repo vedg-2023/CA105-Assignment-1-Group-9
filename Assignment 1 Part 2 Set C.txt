@@ -6,21 +6,7 @@ SET C
 1.
 
 -- Query to list all trains not scheduled on 10th October this year
-SELECT
-    t.train_id,
-    t.train_name
-FROM
-    train t
-WHERE
-    NOT EXISTS (
-        SELECT 1
-        FROM
-            schedule s
-        WHERE
-            s.train_id = t.train_id
-            AND DATE(s.start_date) = '2023-10-10'
-    );
-
+select t.train_id, t.train_name from train t where not exists (select 1 from schedule s where s.train_id = t.train_id and date(s.start_date) = '2023-10-10');
 
 Output:
 +----------+----------------------+
@@ -45,25 +31,7 @@ Output:
 2.
 
 -- Query to list all fleets with total bookings for October
-SELECT
-    c.coach_id,
-    c.mileage,
-    c.last_mntn_dt,
-    t.train_id,
-    t.train_name,
-    COUNT(b.ticket_id) AS total_bookings
-FROM
-    coach c
-    JOIN train t ON c.train_id = t.train_id
-    JOIN schedule sc ON c.train_id = sc.train_id
-    LEFT JOIN booking b ON sc.schedule_id = b.schedule_id
-WHERE
-    MONTH(sc.start_date) = 10
-    AND YEAR(sc.start_date) = YEAR(CURRENT_DATE)
-GROUP BY
-    c.coach_id, c.mileage, c.last_mntn_dt, t.train_id, t.train_name
-ORDER BY
-    total_bookings ASC;
+select c.coach_id, c.mileage, .last_mntn_dt, t.train_id, t.train_name, count(b.ticket_id) as total_bookings from coach c join train t on c.train_id = t.train_id join schedule sc on c.train_id = sc.train_id left join booking b on sc.schedule_id = b.schedule_id where month(sc.start_date) = 10 and year(sc.start_date) = year(current_date) group by c.coach_id, c.mileage, c.last_mntn_dt, t.train_id, t.train_name order by total_bookings asc;
 
 
 Output
@@ -117,18 +85,7 @@ Output
 3.
 
 -- Query to list details of the most popular route
-SELECT
-    r.route_id,
-    r.route,
-    COUNT(b.ticket_id) AS total_bookings
-FROM
-    route r
-    LEFT JOIN schedule s ON r.route_id = s.route_id
-    LEFT JOIN booking b ON s.schedule_id = b.schedule_id
-GROUP BY
-    r.route_id, r.route
-ORDER BY
-    total_bookings DESC;
+select r.route_id, r.route, count(b.ticket_id) as total_bookings from route r left join schedule s on r.route_id = s.route_id left join booking b on s.schedule_id = b.schedule_id group by r.route_id, r.route order by total_bookings desc;
 
 Output:
 +----------+-----------------------------------+----------------+
@@ -160,17 +117,7 @@ Output:
 
 
 -- Query to display details of frequent travelers
-SELECT
-    p.p_id,
-    p.p_name,
-    COUNT(b.ticket_id) AS total_trips
-FROM
-    passenger p
-    JOIN booking b ON p.p_id = b.p_id
-GROUP BY
-    p.p_id, p.p_name
-HAVING
-    total_trips >= 3;
+select p.p_id, p.p_name, count(b.ticket_id) as total_trips from passenger p join booking b on p.p_id = b.p_id group by p.p_id, p.p_name having total_trips >= 3;
 
 Output:
 +-------+--------------+-------------+
@@ -194,64 +141,3 @@ Output:
 
 
 5.
-
--- Query to display details of trains arriving late more than once in this year
-SELECT
-    t.train_id,
-    t.train_name,
-    c1.driver_id,
-    s1.staff_name AS driver_name,
-    c2.codriver_id,
-    s2.staff_name AS codriver_name,
-    s.schedule_id,
-    s.start_date,
-    s.end_date,
-    s.depart_time,
-    s.arrival_time,
-    i.act_depart_time AS actual_depart_time,
-    i.act_arrival_time AS actual_arrival_time
-FROM
-    train t
-    JOIN coach c1 ON t.train_id = c1.train_id
-    JOIN coach c2 ON t.train_id = c2.train_id
-    JOIN schedule s ON t.train_id = s.train_id
-    JOIN include i ON s.schedule_id = i.schedule_id
-    JOIN staff s1 ON c1.driver_id = s1.staff_id
-    JOIN staff s2 ON c2.codriver_id = s2.staff_id
-WHERE
-    YEAR(s.end_date) = YEAR(CURRENT_DATE)
-    AND TIME(i.act_arrival_time) > TIME(s.arrival_time)
-GROUP BY
-    t.train_id, s.schedule_id
-HAVING
-    COUNT(*) > 1;
-
-
-+----------+------------------+-----------+--------------+-------------+---------------+-------------+------------+------------+-------------+--------------+--------------------+---------------------+
-| train_id | train_name       | driver_id | driver_name  | codriver_id | codriver_name | schedule_id | start_date | end_date   | depart_time | arrival_time | actual_depart_time | actual_arrival_time |
-+----------+------------------+-----------+--------------+-------------+---------------+-------------+------------+------------+-------------+--------------+--------------------+---------------------+
-| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0001     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | 08:00:00           | 14:10:00            |
-| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0003     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:25:00     | 13:45:00           | 19:55:00            |
-| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0005     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:10:00     | 19:30:00           | 01:40:00            |
-| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0007     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:40:00     | 08:00:00           | 14:10:00            |
-| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0009     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:25:00     | 13:45:00           | 19:55:00            |
-| T001     | Rajdhani Express | WX0019    | Vishal Nair  | WX0002      | Priya Patel   | SCH0011     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:10:00     | 19:30:00           | 01:40:00            |
-| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0013     | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | 08:00:00           | 14:40:00            |
-| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0015     | 2023-10-20 | 2023-10-20 | 13:45:00    | 20:55:00     | 13:45:00           | 21:25:00            |
-| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0017     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:40:00     | 19:30:00           | 02:10:00            |
-| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0019     | 2023-10-10 | 2023-10-10 | 08:00:00    | 14:10:00     | 08:00:00           | 14:40:00            |
-| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0021     | 2023-10-20 | 2023-10-20 | 13:45:00    | 20:55:00     | 13:45:00           | 21:25:00            |
-| T002     | Shatabdi Express | WX0020    | Preeti Barua | WX0003      | Rahul Singh   | SCH0023     | 2023-10-30 | 2023-10-30 | 19:30:00    | 01:40:00     | 19:30:00           | 02:10:00            |
-| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0025     | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | 08:00:00           | 17:00:00            |
-| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0027     | 2023-10-20 | 2023-10-20 | 13:45:00    | 22:15:00     | 13:45:00           | 22:45:00            |
-| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0029     | 2023-10-30 | 2023-10-30 | 19:30:00    | 04:00:00     | 19:30:00           | 04:30:00            |
-| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0031     | 2023-10-10 | 2023-10-10 | 08:00:00    | 16:30:00     | 08:00:00           | 17:00:00            |
-| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0033     | 2023-10-20 | 2023-10-20 | 13:45:00    | 22:15:00     | 13:45:00           | 22:45:00            |
-| T003     | Duronto Express  | WX0002    | Priya Patel  | WX0004      | Pooja Gupta   | SCH0035     | 2023-10-30 | 2023-10-30 | 19:30:00    | 04:00:00     | 19:30:00           | 04:30:00            |
-| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0037     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | 08:00:00           | 13:50:00            |
-| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0039     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:05:00     | 13:45:00           | 19:35:00            |
-| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0041     | 2023-10-30 | 2023-10-30 | 19:30:00    | 00:50:00     | 19:30:00           | 01:20:00            |
-| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0043     | 2023-10-10 | 2023-10-10 | 08:00:00    | 13:20:00     | 08:00:00           | 13:50:00            |
-| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0045     | 2023-10-20 | 2023-10-20 | 13:45:00    | 19:05:00     | 13:45:00           | 19:35:00            |
-| T004     | Garib Rath       | WX0002    | Priya Patel  | WX0005      | Ravi Verma    | SCH0047     | 2023-10-30 | 2023-10-30 | 19:30:00    | 00:50:00     | 19:30:00           | 01:20:00            |
-+----------+------------------+-----------+--------------+-------------+---------------+-------------+------------+------------+-------------+--------------+--------------------+---------------------+
